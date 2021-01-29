@@ -2,13 +2,13 @@ from spotify import SpotifyClient
 from youtube import YoutubeClient
 
 
-class Glue(object):
+class Glue:
 
-    def __int__(self, yt_json_source, sp_creds_source):
+    def __init__(self, yt_json_source, sp_creds_source):
         self.yt_json_source = yt_json_source
         self.sp_creds_source = sp_creds_source
 
-    def generate(self, new_playlist_name, playlist_description, is_public):
+    def generate(self, new_playlist_name, playlist_description=None, is_public=False):
 
         # ------ YOUTUBE ------
 
@@ -39,8 +39,10 @@ class Glue(object):
 
         # Get song URI of our query.
         song_uris = []
-        for track_title in tracks:
-            song_uris.append(spotify_client.search_general(track_title))
+        for song_info in tracks:
+            artist = song_info["artist"]
+            track = song_info["track"]
+            song_uris.append(spotify_client.search_song(artist, track))
 
         # Add the songs to the playlist.
         for song_uri in song_uris:

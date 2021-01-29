@@ -46,11 +46,18 @@ class SpotifyClient(object):
     def create_playlist(self, playlist_name, playlist_description, bool_public):
         query = f"https://api.spotify.com/v1/users/{self.user_id}/playlists"
 
-        request_body = json.dumps({
-            "name": playlist_name,
-            "description": playlist_description,
-            "public": bool_public
-        })
+        if playlist_description is None:
+            request_body = json.dumps({
+                "name": playlist_name,
+                "public": bool_public
+            })
+
+        else:
+            request_body = json.dumps({
+                "name": playlist_name,
+                "description": playlist_description,
+                "public": bool_public
+            })
 
         response = requests.post(
             query,

@@ -1,11 +1,10 @@
-import requests
-import urllib.parse
-import json
+from pytube import YouTube
 
 import os
 
 import google_auth_oauthlib
 import googleapiclient.discovery
+import youtube_dl
 
 
 class YoutubeClient(object):
@@ -60,8 +59,27 @@ class YoutubeClient(object):
 
         response = request.execute()
 
-        tracks = []
+        all_songs = []
         for data in response["items"]:
-            tracks.append(data["snippet"]["title"])
+            video_id = data["snippet"]["resourceId"]["videoId"]
+            artist, track = self.get_artist_and_track(video_id)
 
-        return tracks
+            if artist and track:
+                all_songs.append({"artist": artist, "track": track})
+
+        return all_songs
+
+    @staticmethod
+    def get_artist_and_track(video_id):
+
+        youtube_url = f"https://www.youtube.com/watch?v={video_id}"
+
+        video = YouTube(youtube_url)
+        meta = video.metadata
+
+        artist = meta[0]["Artist"]
+        track = meta[0]["Song"]
+
+        return artist, track
+
+
