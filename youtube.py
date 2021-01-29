@@ -37,10 +37,22 @@ class YoutubeClient(object):
         response = request.execute()
 
         all_playlists = response["items"]
-        playlist = all_playlists[0]
-        return playlist["id"]
 
-    def get_playlist_items(self, playlist_id):
+        titles = {}
+        playlist_ids = []
+        index = 0
+        for data in all_playlists:
+            titles[index] = data["snippet"]["localized"]["title"]
+            playlist_ids.append(data["id"])
+            index += 1
+
+        for k, v in titles.items():
+            print(k, v)
+        selection = input("Select the corresponding number of the playlist you would like to convert.")
+
+        return playlist_ids[int(selection)]
+
+    def get_playlist_tracks(self, playlist_id):
         request = self.youtube_client.playlistItems().list(
             playlistId=playlist_id,
             part="snippet"
@@ -48,8 +60,8 @@ class YoutubeClient(object):
 
         response = request.execute()
 
-        items = response["items"]
-        snippet = items[0]
-        title = snippet["title"]
+        tracks = []
+        for data in response["items"]:
+            tracks.append(data["snippet"]["title"])
 
-        return title
+        return tracks

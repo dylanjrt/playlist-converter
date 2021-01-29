@@ -9,7 +9,7 @@ class SpotifyClient(object):
         self.api_token = api_token
         self.user_id = user_id
 
-    def search_generally(self, input):
+    def search_general(self, input):
         query = urllib.parse.quote(f'{input}')
         url = f"https://api.spotify.com/v1/search?q={query}&type=track"
         response = requests.get(
