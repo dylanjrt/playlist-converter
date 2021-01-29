@@ -4,9 +4,6 @@ import json
 
 
 class SpotifyClient(object):
-    trying
-    to
-    change
 
     def __init__(self, api_token, user_id):
         self.api_token = api_token
